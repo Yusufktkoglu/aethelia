@@ -37,6 +37,31 @@
 <!-- Canonical -->
 <link rel="canonical" href="https://aethelia.space">
 
+<!-- Schema.org structured data for SEO -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebApplication",
+  "name": "Aethelia",
+  "alternateName": "Aethelia Space Simulator",
+  "url": "https://aethelia.space",
+  "description": "Interactive 3D space simulator featuring real star systems (Solar System, Alpha Centauri, TRAPPIST-1, Sirius) and cosmic anomalies (Sagittarius A*, M87*, TON 618, Crab Pulsar). Design your own planets with custom composition.",
+  "applicationCategory": "EducationalApplication",
+  "operatingSystem": "Web Browser",
+  "offers": {
+    "@type": "Offer",
+    "price": "0",
+    "priceCurrency": "USD"
+  },
+  "creator": {
+    "@type": "Organization",
+    "name": "Aethelia"
+  },
+  "keywords": "space simulator, solar system, exoplanets, black hole, TRAPPIST-1, Alpha Centauri, Sagittarius A*, astronomy, WebGL, Three.js",
+  "image": "https://aethelia.space/assets/og-image.png"
+}
+</script>
+
 <!-- Google Analytics (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-WVD7YJW6CB"></script>
 <script>
@@ -535,6 +560,69 @@
     100% { transform: translateX(400%); }
   }
 
+  /* ===== AUDIO TOGGLE BUTTON ===== */
+  .audio-toggle {
+    position: fixed;
+    bottom: 58px;
+    right: 20px;
+    z-index: 25;
+    width: 42px;
+    height: 42px;
+    background: var(--bg-panel);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    transition: all 0.2s;
+  }
+  .audio-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .audio-toggle.muted {
+    opacity: 0.5;
+  }
+
+  /* ===== TRIVIA BOX (Did You Know) ===== */
+  .trivia-box {
+    margin-top: 12px;
+    padding: 12px 14px;
+    border-left: 2px solid var(--accent);
+    background: rgba(255, 179, 71, 0.06);
+    font-size: 11px;
+    line-height: 1.55;
+    color: var(--text);
+  }
+  .trivia-label {
+    font-size: 8px;
+    letter-spacing: 0.3em;
+    color: var(--accent);
+    margin-bottom: 5px;
+    font-family: 'Syncopate', sans-serif;
+    font-weight: 700;
+  }
+  .trivia-text {
+    font-family: 'Instrument Serif', serif;
+    font-style: italic;
+    color: var(--text-dim);
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 600px) {
+    .audio-toggle {
+      bottom: 52px;
+      right: 12px;
+      width: 38px;
+      height: 38px;
+    }
+  }
+
   .warp {
     position: fixed; inset: 0;
     background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, rgba(5,8,16,0) 60%);
@@ -573,6 +661,9 @@
   <div class="loader-text">INITIALIZING AETHELIA</div>
   <div class="loader-bar"></div>
 </div>
+
+<!-- Audio toggle button -->
+<button class="audio-toggle muted" id="audio-toggle" title="Toggle ambient audio">🔇</button>
 
 <div id="canvas-container"></div>
 
@@ -1803,43 +1894,153 @@ const SYSTEMS = {
       { name: 'Mercury', type: 'TERRESTRIAL · I', distance: 18, radius: 1.2, speed: 1.6, tilt: 0,
         palette: ['#9a8260', '#6b5d42', '#b89a70', '#4a3c28'],
         water: 0, land: 95, ice: 3, atmosphere: 2, rings: false, atmColor: 0x998866,
-        description: 'The swift messenger — closest to the Sun.',
+        description: 'The swift messenger — closest to the Sun, cratered and scorched.',
+        trivia: 'A day on Mercury (from sunrise to sunrise) lasts 176 Earth days — longer than its 88-day year. It rotates three times for every two orbits.',
         info: { 'DISTANCE': '57.9M km', 'DIAMETER': '4,879 km', 'PERIOD': '88 days', 'TEMP': '−173 / 427 °C' } },
       { name: 'Venus', type: 'TERRESTRIAL · II', distance: 28, radius: 1.9, speed: 1.2, tilt: 3,
         palette: ['#f0d080', '#d4a858', '#e8c070', '#b88838'],
         water: 0, land: 10, ice: 0, atmosphere: 95, rings: false, atmColor: 0xffdd99,
-        description: 'Our twisted twin — choked in sulfuric acid.',
+        description: 'Our twisted twin — choked in clouds of sulfuric acid.',
+        trivia: 'Venus rotates backwards. If you stood on its surface, the Sun would rise in the west and set in the east — on the rare occasion you could see it through the clouds.',
         info: { 'DISTANCE': '108.2M km', 'DIAMETER': '12,104 km', 'PERIOD': '225 days', 'TEMP': '462 °C' } },
       { name: 'Earth', type: 'TERRESTRIAL · III', distance: 40, radius: 2.1, speed: 1.0, tilt: 23.5,
         palette: ['#2b6cb0', '#3a8b4a', '#87ceeb', '#1a4880'],
         water: 71, land: 27, ice: 2, atmosphere: 60, rings: false, atmColor: 0x88ccff,
-        description: 'The pale blue dot.',
-        info: { 'DISTANCE': '149.6M km', 'DIAMETER': '12,742 km', 'PERIOD': '365.25 days', 'MOONS': '1' } },
+        description: 'The pale blue dot — the only known harbor of life.',
+        trivia: 'Earth is the densest planet in the solar system. Everything you\'ve ever loved, every song written, every war fought — all on this one suspended mote of dust.',
+        info: { 'DISTANCE': '149.6M km', 'DIAMETER': '12,742 km', 'PERIOD': '365.25 days', 'MOONS': '1' },
+        moons: [
+          { name: 'Moon', distance: 4.5, radius: 0.55, speed: 8, tilt: 5,
+            palette: ['#c0c0c0', '#888888', '#e0e0e0', '#555555'],
+            water: 0, land: 100, ice: 0, atmosphere: 0, rings: false,
+            description: 'Earth\'s only natural satellite — tidally locked, always showing the same face.',
+            trivia: 'The Moon is slowly drifting away from Earth at 3.8 cm per year. In 600 million years, total solar eclipses will no longer be possible.',
+            info: { 'DIAMETER': '3,474 km', 'ORBITAL PERIOD': '27.3 days', 'DISTANCE': '384,400 km', 'LANDINGS': '6 (1969-72)' } }
+        ] },
       { name: 'Mars', type: 'TERRESTRIAL · IV', distance: 54, radius: 1.6, speed: 0.8, tilt: 25,
         palette: ['#d46424', '#a03808', '#e8753d', '#6b2408'],
         water: 2, land: 85, ice: 12, atmosphere: 8, rings: false, atmColor: 0xff8866,
-        description: 'The red world.',
-        info: { 'DISTANCE': '227.9M km', 'DIAMETER': '6,779 km', 'PERIOD': '687 days', 'MOONS': '2' } },
+        description: 'The red world — cold desert with the tallest mountain in the solar system.',
+        trivia: 'Olympus Mons on Mars is the tallest known volcano in the solar system. At 22 km high, it is nearly three times the height of Mount Everest.',
+        info: { 'DISTANCE': '227.9M km', 'DIAMETER': '6,779 km', 'PERIOD': '687 days', 'MOONS': '2' },
+        moons: [
+          { name: 'Phobos', distance: 3.5, radius: 0.25, speed: 20, tilt: 0,
+            palette: ['#8a6a4a', '#5a3a20', '#a08060', '#3a2010'],
+            water: 0, land: 100, ice: 0, atmosphere: 0, rings: false,
+            description: 'The larger and closer of Mars\' two potato-shaped moons.',
+            trivia: 'Phobos orbits Mars so closely that it rises and sets three times per Martian day — and it\'s slowly spiraling inward. In ~50 million years it will either crash or break apart.',
+            info: { 'DIAMETER': '22 km', 'PERIOD': '7.7 hours', 'DISTANCE': '9,376 km', 'FATE': 'INFALLING' } },
+          { name: 'Deimos', distance: 5, radius: 0.18, speed: 12, tilt: 0,
+            palette: ['#a08870', '#6a5440', '#c0a888', '#4a3a28'],
+            water: 0, land: 100, ice: 0, atmosphere: 0, rings: false,
+            description: 'The smaller, outer Martian moon — likely a captured asteroid.',
+            trivia: 'Deimos is so small (only 12 km across) that its gravity is too weak to pull it into a sphere — it\'s shaped like a lumpy potato.',
+            info: { 'DIAMETER': '12 km', 'PERIOD': '30.3 hours', 'DISTANCE': '23,463 km', 'ORIGIN': 'ASTEROID?' } }
+        ] },
+      { name: 'Ceres', type: 'DWARF PLANET', distance: 65, radius: 0.7, speed: 0.55, tilt: 4,
+        palette: ['#7a7060', '#5a5040', '#9a9080', '#3a3020'],
+        water: 25, land: 60, ice: 15, atmosphere: 0, rings: false, atmColor: 0x888880,
+        description: 'The largest object in the asteroid belt and a dwarf planet.',
+        trivia: 'Ceres contains more fresh water than all of Earth\'s — locked as ice beneath its surface. NASA\'s Dawn probe found evidence of a subsurface ocean.',
+        info: { 'DISTANCE': '413M km', 'DIAMETER': '940 km', 'PERIOD': '4.6 years', 'DISCOVERED': '1801' } },
       { name: 'Jupiter', type: 'GAS GIANT · V', distance: 80, radius: 5.5, speed: 0.43, tilt: 3,
         palette: ['#e8c890', '#a06838', '#f4dca8', '#704818', '#c99866'],
         water: 0, land: 0, ice: 0, atmosphere: 100, rings: false, atmColor: 0xffcc99,
-        description: 'The king of planets.',
-        info: { 'DISTANCE': '778.5M km', 'DIAMETER': '139,820 km', 'PERIOD': '11.9 years', 'MOONS': '95+' } },
+        description: 'The king of planets — a gas colossus with storms older than civilization.',
+        trivia: 'The Great Red Spot, a storm larger than Earth, has been raging on Jupiter for at least 350 years. It was first observed in 1665.',
+        info: { 'DISTANCE': '778.5M km', 'DIAMETER': '139,820 km', 'PERIOD': '11.9 years', 'MOONS': '95+' },
+        moons: [
+          { name: 'Io', distance: 8, radius: 0.5, speed: 4, tilt: 0,
+            palette: ['#ffdd60', '#dd8840', '#ffee90', '#aa4420'],
+            water: 0, land: 80, ice: 0, atmosphere: 20, rings: false, atmColor: 0xffaa44,
+            description: 'The most volcanically active body in the solar system.',
+            trivia: 'Io has over 400 active volcanoes, some spewing sulfur 500 km into space. Its surface is so hostile it would melt a spacecraft in seconds.',
+            info: { 'DIAMETER': '3,643 km', 'PERIOD': '1.77 days', 'VOLCANOES': '400+', 'TIDAL HEATING': 'EXTREME' } },
+          { name: 'Europa', distance: 11, radius: 0.45, speed: 3, tilt: 0,
+            palette: ['#e8f0f8', '#c0d0e0', '#ffffff', '#a0b0c0'],
+            water: 10, land: 5, ice: 85, atmosphere: 5, rings: false, atmColor: 0xaaccee,
+            description: 'An ice-crusted moon hiding a vast liquid ocean beneath.',
+            trivia: 'Europa\'s subsurface ocean may contain twice as much water as all of Earth\'s oceans combined. It is one of the most promising places to find extraterrestrial life.',
+            info: { 'DIAMETER': '3,122 km', 'PERIOD': '3.55 days', 'SUBSURFACE OCEAN': 'YES', 'LIFE CANDIDATE': 'HIGH' } },
+          { name: 'Ganymede', distance: 14, radius: 0.65, speed: 2.3, tilt: 0,
+            palette: ['#9a8870', '#6a5848', '#baa898', '#4a3828'],
+            water: 5, land: 50, ice: 45, atmosphere: 3, rings: false,
+            description: 'The largest moon in the solar system — bigger than Mercury.',
+            trivia: 'Ganymede is the only moon in the solar system with its own magnetic field, generated by a liquid iron core, and it also has an underground ocean.',
+            info: { 'DIAMETER': '5,268 km', 'PERIOD': '7.15 days', 'MAGNETIC FIELD': 'YES', 'SIZE': 'LARGEST MOON' } },
+          { name: 'Callisto', distance: 17, radius: 0.6, speed: 1.7, tilt: 0,
+            palette: ['#7a6a5a', '#4a3a2a', '#9a8a7a', '#2a1a10'],
+            water: 5, land: 60, ice: 35, atmosphere: 2, rings: false,
+            description: 'The most heavily cratered object in the solar system.',
+            trivia: 'Callisto\'s surface has remained essentially unchanged for 4 billion years — every crater is a preserved snapshot of ancient cosmic impacts.',
+            info: { 'DIAMETER': '4,821 km', 'PERIOD': '16.7 days', 'SURFACE AGE': '~4 Gyr', 'CRATERS': 'EXTREME' } }
+        ] },
       { name: 'Saturn', type: 'GAS GIANT · VI', distance: 110, radius: 4.8, speed: 0.32, tilt: 27,
         palette: ['#f4d890', '#c0a060', '#fae4ac', '#a07840'],
         water: 0, land: 0, ice: 0, atmosphere: 100, rings: true, atmColor: 0xffdd99,
-        description: 'The jewel with rings.',
-        info: { 'DISTANCE': '1.43B km', 'DIAMETER': '116,460 km', 'PERIOD': '29.5 years', 'MOONS': '146+' } },
+        description: 'The jewel — wrapped in the most magnificent ring system.',
+        trivia: 'Saturn is less dense than water. If you could find a bathtub big enough, Saturn would actually float in it.',
+        info: { 'DISTANCE': '1.43B km', 'DIAMETER': '116,460 km', 'PERIOD': '29.5 years', 'MOONS': '146+' },
+        moons: [
+          { name: 'Titan', distance: 10, radius: 0.65, speed: 2, tilt: 0,
+            palette: ['#ddaa40', '#aa7020', '#f4c860', '#885010'],
+            water: 5, land: 30, ice: 15, atmosphere: 100, rings: false, atmColor: 0xffbb44,
+            description: 'A hazy orange moon with lakes of liquid methane.',
+            trivia: 'Titan is the only moon with a thick atmosphere and the only place beyond Earth with stable liquid on its surface — not water, but methane and ethane. It rains hydrocarbons.',
+            info: { 'DIAMETER': '5,150 km', 'PERIOD': '16 days', 'ATMOSPHERE': 'DENSE N₂', 'METHANE LAKES': 'YES' } },
+          { name: 'Enceladus', distance: 7, radius: 0.35, speed: 3.2, tilt: 0,
+            palette: ['#ffffff', '#ccddff', '#ffffff', '#aaccdd'],
+            water: 5, land: 0, ice: 95, atmosphere: 0, rings: false,
+            description: 'A small, icy moon that erupts water geysers into space.',
+            trivia: 'Enceladus has active geysers at its south pole that shoot water ice 500 km into space. Some of that water reaches Saturn\'s E-ring — you can see Enceladus\' ocean from a telescope.',
+            info: { 'DIAMETER': '504 km', 'PERIOD': '1.37 days', 'GEYSERS': 'ACTIVE', 'LIFE CANDIDATE': 'HIGH' } },
+          { name: 'Mimas', distance: 5.5, radius: 0.22, speed: 5, tilt: 0,
+            palette: ['#c0c0c0', '#888888', '#dddddd', '#666666'],
+            water: 0, land: 20, ice: 80, atmosphere: 0, rings: false,
+            description: 'The "Death Star moon" — dominated by the enormous Herschel crater.',
+            trivia: 'Mimas looks eerily similar to the Death Star from Star Wars. The massive Herschel crater is nearly a third of the moon\'s diameter — any larger impact would have shattered it.',
+            info: { 'DIAMETER': '396 km', 'PERIOD': '22.6 hours', 'HERSCHEL CRATER': '130 km wide' } }
+        ] },
       { name: 'Uranus', type: 'ICE GIANT · VII', distance: 145, radius: 3.2, speed: 0.23, tilt: 98,
         palette: ['#9fe0e0', '#c0ecec', '#7fc8d4', '#60a8b8'],
         water: 0, land: 0, ice: 80, atmosphere: 100, rings: true, atmColor: 0xaaeeff,
-        description: 'The sideways world.',
+        description: 'The sideways world — tilted on its axis, rolling through space.',
+        trivia: 'Uranus is tipped on its side — likely from an ancient collision. Its poles point alternately at the Sun, giving each pole 42 years of continuous daylight followed by 42 years of darkness.',
         info: { 'DISTANCE': '2.87B km', 'DIAMETER': '50,724 km', 'PERIOD': '84 years', 'MOONS': '27' } },
       { name: 'Neptune', type: 'ICE GIANT · VIII', distance: 175, radius: 3.1, speed: 0.18, tilt: 28,
         palette: ['#4575c8', '#2d4d8a', '#6890d8', '#1e3260'],
         water: 0, land: 0, ice: 75, atmosphere: 100, rings: false, atmColor: 0x5588ee,
-        description: 'The wind-whipped frontier.',
-        info: { 'DISTANCE': '4.50B km', 'DIAMETER': '49,244 km', 'PERIOD': '165 years', 'MOONS': '14' } }
+        description: 'The wind-whipped frontier — deep azure giant with 2,100 km/h winds.',
+        trivia: 'Neptune has the fastest winds in the solar system — up to 2,100 km/h. That\'s faster than the speed of sound on Earth.',
+        info: { 'DISTANCE': '4.50B km', 'DIAMETER': '49,244 km', 'PERIOD': '165 years', 'MOONS': '14' },
+        moons: [
+          { name: 'Triton', distance: 7, radius: 0.55, speed: 2.5, tilt: 0,
+            palette: ['#e8ddcc', '#ccbbaa', '#f4e8d8', '#aa9988'],
+            water: 5, land: 10, ice: 85, atmosphere: 10, rings: false, atmColor: 0xccaa99,
+            description: 'A backwards-orbiting moon, likely a captured Kuiper Belt object.',
+            trivia: 'Triton is the only large moon that orbits its planet backwards — evidence it was captured from the Kuiper Belt. It\'s slowly spiraling inward and will be torn apart in 3.6 billion years.',
+            info: { 'DIAMETER': '2,707 km', 'PERIOD': '5.88 days (retrograde)', 'ORIGIN': 'KUIPER BELT', 'FATE': 'DISINTEGRATION' } }
+        ] },
+      { name: 'Pluto', type: 'DWARF PLANET', distance: 210, radius: 0.55, speed: 0.12, tilt: 120,
+        palette: ['#c8a888', '#886848', '#e8c8a8', '#684828'],
+        water: 5, land: 55, ice: 40, atmosphere: 10, rings: false, atmColor: 0xccaa88,
+        description: 'The former ninth planet — a complex world of ice mountains and nitrogen plains.',
+        trivia: 'Pluto has mountains of water ice as tall as the Rockies, a heart-shaped plain of frozen nitrogen, and a thin blue atmosphere. New Horizons flew by in 2015 and revealed it\'s far more dynamic than anyone expected.',
+        info: { 'DISTANCE': '5.9B km', 'DIAMETER': '2,377 km', 'PERIOD': '248 years', 'MOONS': '5' },
+        moons: [
+          { name: 'Charon', distance: 2.5, radius: 0.28, speed: 4, tilt: 0,
+            palette: ['#a09888', '#706858', '#c0b8a8', '#504838'],
+            water: 0, land: 60, ice: 40, atmosphere: 0, rings: false,
+            description: 'Pluto\'s largest moon — so big they form a binary system.',
+            trivia: 'Charon is so large relative to Pluto that they actually orbit a point in the empty space between them. They\'re technically a double dwarf planet.',
+            info: { 'DIAMETER': '1,212 km', 'PERIOD': '6.39 days', 'RATIO': '~50% of Pluto', 'TYPE': 'BINARY' } }
+        ] },
+      { name: 'Eris', type: 'DWARF PLANET', distance: 260, radius: 0.55, speed: 0.07, tilt: 44,
+        palette: ['#ddddee', '#aaaabb', '#ffffff', '#888899'],
+        water: 0, land: 15, ice: 80, atmosphere: 5, rings: false, atmColor: 0xccccdd,
+        description: 'The most massive dwarf planet — discovered 2005, its discovery led to Pluto\'s reclassification.',
+        trivia: 'Eris is so far out that it takes sunlight 9 hours to reach it. Its discovery in 2005 directly caused the International Astronomical Union to create the "dwarf planet" category, demoting Pluto.',
+        info: { 'DISTANCE': '~10B km', 'DIAMETER': '2,326 km', 'PERIOD': '558 years', 'DISCOVERED': '2005' } }
     ]
   },
   alphaCentauri: {
@@ -1905,6 +2106,7 @@ const SYSTEMS = {
         palette: ['#b84828', '#802010', '#d46040', '#601410'],
         water: 0, land: 20, ice: 0, atmosphere: 70, rings: false, atmColor: 0xdd5533,
         description: 'Too hot for life.',
+        trivia: 'All seven TRAPPIST-1 planets orbit closer to their star than Mercury does to our Sun. The entire system would fit inside Mercury\'s orbit.',
         info: { 'MASS': '1.37 M⊕', 'YEAR': '1.51 days', 'TEMP': '~500 K', 'LOCKED': 'YES' } },
       { name: 'TRAPPIST-1c', type: 'TERRESTRIAL · II', distance: 20, radius: 1.0, speed: 3.0, tilt: 0,
         palette: ['#d08858', '#a06030', '#e8a878', '#804020'],
@@ -1920,6 +2122,7 @@ const SYSTEMS = {
         palette: ['#2b6cb0', '#3a8b4a', '#87ceeb', '#2c5282'],
         water: 55, land: 30, ice: 10, atmosphere: 50, rings: false, atmColor: 0x88ccff,
         description: 'The most Earth-like of the seven.',
+        trivia: 'TRAPPIST-1e has the most similar density to Earth of all known exoplanets. Standing on its surface, you\'d see the other six planets looming in the sky — some larger than our Moon appears.',
         info: { 'MASS': '0.69 M⊕', 'YEAR': '6.10 days', 'TEMP': '~250 K', 'HAB ZONE': 'YES' } },
       { name: 'TRAPPIST-1f', type: 'TERRESTRIAL · V', distance: 42, radius: 1.05, speed: 1.3, tilt: 0,
         palette: ['#4a7bb0', '#2a5b90', '#6a9bd0', '#1a3b70'],
@@ -1995,16 +2198,19 @@ const REAL_ANOMALIES = {
   sgrA: { name: 'Sagittarius A*', displayName: 'Sagittarius A*', anomalyType: 'blackhole',
     tagline: 'MILKY WAY CENTER', icon: '⬤', radius: 10,
     description: 'The supermassive black hole at the heart of our galaxy.',
+    trivia: 'Sgr A* is 26,000 light-years away — when you look at its image, you\'re seeing light that left during the last Ice Age, when humans were first making cave paintings.',
     info: { 'MASS': '4.3 million M☉', 'DISTANCE': '26,000 ly', 'SCHWARZSCHILD R.': '12.7 million km',
       'LOCATION': 'MILKY WAY CORE', 'IMAGED': '2022 · EHT', 'TYPE': 'SUPERMASSIVE' } },
   m87: { name: 'M87*', displayName: 'M87* · Pōwehi', anomalyType: 'blackhole',
     tagline: 'FIRST IMAGED · 2019', icon: '⬤', radius: 14,
     description: 'The first black hole ever directly imaged.',
+    trivia: 'The shadow of M87* is larger than our entire solar system. Light would need 40 hours to cross it. Its nickname "Pōwehi" means "embellished dark source of unending creation" in Hawaiian.',
     info: { 'MASS': '5.4 billion M☉', 'DISTANCE': '55 million ly', 'SHADOW': '~40 billion km',
       'IMAGED': '2019 · EHT', 'GALAXY': 'M87', 'TYPE': 'SUPERMASSIVE' } },
   ton618: { name: 'TON 618', displayName: 'TON 618', anomalyType: 'quasar',
     tagline: 'ULTRAMASSIVE', icon: '✺', radius: 12,
     description: 'One of the most massive black holes ever discovered.',
+    trivia: 'TON 618 is 140 trillion times brighter than our Sun. If it replaced the Sun, its light alone would sterilize Earth. Yet we see it as a faint speck because it\'s 10.8 billion light-years away.',
     info: { 'MASS': '66 billion M☉', 'DISTANCE': '10.8 billion ly', 'SCHWARZSCHILD R.': '1,300 AU',
       'LUMINOSITY': '10⁴¹ W', 'BRIGHTNESS': '140 trillion L☉', 'TYPE': 'ULTRAMASSIVE' } },
   cygnusX1: { name: 'Cygnus X-1', displayName: 'Cygnus X-1', anomalyType: 'blackhole',
@@ -2025,11 +2231,13 @@ const REAL_ANOMALIES = {
   crabPulsar: { name: 'Crab Pulsar', displayName: 'Crab Pulsar', anomalyType: 'pulsar',
     tagline: 'SUPERNOVA 1054', icon: '◉', radius: 3,
     description: 'Born in the supernova of 1054 CE.',
+    trivia: 'Chinese astronomers recorded the Crab supernova on July 4, 1054 CE — it was visible in daylight for 23 days. The pulsar spinning 30 times per second today is the compact corpse of that explosion, still glowing a thousand years later.',
     info: { 'PERIOD': '33.5 ms', 'SPIN RATE': '30/s', 'AGE': '~970 years',
       'DISTANCE': '6,500 ly', 'DISCOVERED': '1968', 'PROGENITOR': 'SN 1054' } },
   psr1919: { name: 'PSR B1919+21', displayName: 'PSR B1919+21', anomalyType: 'pulsar',
     tagline: 'FIRST DISCOVERED', icon: '◉', radius: 3,
     description: 'The first pulsar ever discovered.',
+    trivia: 'When Jocelyn Bell Burnell discovered this pulsar\'s regular radio pulses in 1967, the signal was so unnaturally precise that she and her advisor jokingly labeled it "LGM-1" — Little Green Men 1, thinking it might be aliens.',
     info: { 'PERIOD': '1.337 s', 'DISCOVERED': '1967', 'DISCOVERER': 'J. BELL BURNELL',
       'DISTANCE': '2,283 ly', 'NICKNAME': 'LGM-1', 'NOBEL PRIZE': '1974' } },
   psrJ0740: { name: 'PSR J0740+6620', displayName: 'PSR J0740+6620', anomalyType: 'neutron',
@@ -2139,6 +2347,42 @@ function loadSystem(key) {
       const planet = createPlanet({ ...p, seed: Math.random() * 100 });
       scene.add(planet);
       planets.push(planet);
+
+      // Create moons that orbit this planet
+      if (p.moons && Array.isArray(p.moons)) {
+        p.moons.forEach(moonConfig => {
+          const moon = createPlanet({
+            ...moonConfig,
+            seed: Math.random() * 100,
+            distance: moonConfig.distance,  // relative to parent planet
+            type: moonConfig.type || 'MOON'
+          });
+          // Mark as moon and link to parent
+          moon.userData.isMoon = true;
+          moon.userData.parentPlanet = planet;
+          moon.userData.moonDistance = moonConfig.distance;
+          // Hide default orbit (we'll draw it relative to parent)
+          if (moon.userData.orbit) {
+            scene.remove(moon.userData.orbit);
+            // Create a new smaller orbit line attached to parent
+            const mog = new THREE.BufferGeometry();
+            const mpts = [];
+            for (let i = 0; i <= 64; i++) {
+              const a = (i / 64) * Math.PI * 2;
+              mpts.push(Math.cos(a) * moonConfig.distance, 0, Math.sin(a) * moonConfig.distance);
+            }
+            mog.setAttribute('position', new THREE.Float32BufferAttribute(mpts, 3));
+            const moonOrbit = new THREE.Line(mog, new THREE.LineBasicMaterial({
+              color: 0x8899bb, transparent: true, opacity: 0.25
+            }));
+            // Add orbit as child of planet so it moves with it
+            planet.add(moonOrbit);
+            moon.userData.orbit = moonOrbit;
+          }
+          scene.add(moon);
+          planets.push(moon);
+        });
+      }
     });
     document.getElementById('current-system').textContent = 'SYSTEM · ' + system.name;
     document.getElementById('current-system').classList.remove('anomaly');
@@ -2174,6 +2418,7 @@ function loadAnomaly(key) {
       name: data.name, anomalyType: data.anomalyType,
       distance: 0, speed: 0, radius: data.radius,
       description: data.description, info: data.info,
+      trivia: data.trivia,
       type: data.tagline, realWorld: true
     });
     anom.position.set(0, 0, 0);
@@ -2327,6 +2572,10 @@ function updateInfoPanel(obj) {
     </div>
     ${renderCompositionBars(d)}
     <div class="planet-desc">${d.description || ''}</div>
+    ${d.trivia ? `<div class="trivia-box">
+      <div class="trivia-label">✦ DID YOU KNOW?</div>
+      <div class="trivia-text">${d.trivia}</div>
+    </div>` : ''}
   `;
 }
 
@@ -2580,8 +2829,17 @@ function animate() {
   planets.forEach(p => {
     const d = p.userData;
     d.angle += dt * d.speed * 0.1 * simSpeed;
-    p.position.x = Math.cos(d.angle) * d.distance;
-    p.position.z = Math.sin(d.angle) * d.distance;
+    if (d.isMoon && d.parentPlanet) {
+      // Moon orbits its parent planet
+      const parentPos = d.parentPlanet.position;
+      p.position.x = parentPos.x + Math.cos(d.angle) * d.moonDistance;
+      p.position.z = parentPos.z + Math.sin(d.angle) * d.moonDistance;
+      p.position.y = parentPos.y;
+    } else {
+      // Regular planet orbits the star
+      p.position.x = Math.cos(d.angle) * d.distance;
+      p.position.z = Math.sin(d.angle) * d.distance;
+    }
     d.mesh.rotation.y += dt * 0.3 * simSpeed;
     if (d.clouds) d.clouds.rotation.y += dt * 0.35 * simSpeed;
   });
@@ -2622,6 +2880,140 @@ window.addEventListener('resize', () => {
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
 });
+
+// ===== AMBIENT AUDIO SYSTEM =====
+// Create an ambient space drone using Web Audio API (no external files needed)
+let audioContext = null;
+let ambientAudio = null;
+let ambientGain = null;
+let warpSound = null;
+let isMuted = true;
+const audioToggle = document.getElementById('audio-toggle');
+
+function initAudio() {
+  if (audioContext) return;
+  try {
+    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+    // Create a deep ambient drone using multiple low oscillators
+    ambientGain = audioContext.createGain();
+    ambientGain.gain.value = 0.0;
+    ambientGain.connect(audioContext.destination);
+
+    // Low frequency base drone
+    const osc1 = audioContext.createOscillator();
+    osc1.type = 'sine';
+    osc1.frequency.value = 55; // Deep A1
+
+    // Slightly detuned second oscillator for richness
+    const osc2 = audioContext.createOscillator();
+    osc2.type = 'sine';
+    osc2.frequency.value = 82.4; // E2
+
+    // Higher harmonic
+    const osc3 = audioContext.createOscillator();
+    osc3.type = 'sine';
+    osc3.frequency.value = 110; // A2
+
+    // Filters for spacey character
+    const filter = audioContext.createBiquadFilter();
+    filter.type = 'lowpass';
+    filter.frequency.value = 400;
+    filter.Q.value = 1;
+
+    // Slow LFO for subtle filter movement
+    const lfo = audioContext.createOscillator();
+    lfo.frequency.value = 0.07; // very slow
+    const lfoGain = audioContext.createGain();
+    lfoGain.gain.value = 150;
+    lfo.connect(lfoGain);
+    lfoGain.connect(filter.frequency);
+
+    // Gain per oscillator
+    const g1 = audioContext.createGain(); g1.gain.value = 0.25;
+    const g2 = audioContext.createGain(); g2.gain.value = 0.18;
+    const g3 = audioContext.createGain(); g3.gain.value = 0.1;
+
+    osc1.connect(g1).connect(filter);
+    osc2.connect(g2).connect(filter);
+    osc3.connect(g3).connect(filter);
+    filter.connect(ambientGain);
+
+    osc1.start();
+    osc2.start();
+    osc3.start();
+    lfo.start();
+
+    ambientAudio = {
+      play: () => {
+        if (audioContext.state === 'suspended') audioContext.resume();
+        ambientGain.gain.cancelScheduledValues(audioContext.currentTime);
+        ambientGain.gain.linearRampToValueAtTime(0.15, audioContext.currentTime + 2);
+      },
+      pause: () => {
+        ambientGain.gain.cancelScheduledValues(audioContext.currentTime);
+        ambientGain.gain.linearRampToValueAtTime(0, audioContext.currentTime + 0.5);
+      }
+    };
+  } catch (e) {
+    console.warn('Web Audio API not supported:', e);
+  }
+}
+
+function playWarpSound() {
+  if (!audioContext || isMuted) return;
+  try {
+    const now = audioContext.currentTime;
+    const osc = audioContext.createOscillator();
+    const gain = audioContext.createGain();
+    const filter = audioContext.createBiquadFilter();
+
+    osc.type = 'sawtooth';
+    osc.frequency.setValueAtTime(40, now);
+    osc.frequency.exponentialRampToValueAtTime(800, now + 0.4);
+    osc.frequency.exponentialRampToValueAtTime(200, now + 0.8);
+
+    filter.type = 'bandpass';
+    filter.frequency.value = 800;
+    filter.Q.value = 4;
+
+    gain.gain.setValueAtTime(0, now);
+    gain.gain.linearRampToValueAtTime(0.15, now + 0.1);
+    gain.gain.linearRampToValueAtTime(0.0, now + 0.8);
+
+    osc.connect(filter).connect(gain).connect(audioContext.destination);
+    osc.start(now);
+    osc.stop(now + 0.9);
+  } catch (e) {}
+}
+
+audioToggle.addEventListener('click', () => {
+  if (!audioContext) initAudio();
+  isMuted = !isMuted;
+  if (isMuted) {
+    audioToggle.classList.add('muted');
+    audioToggle.textContent = '🔇';
+    if (ambientAudio) ambientAudio.pause();
+  } else {
+    audioToggle.classList.remove('muted');
+    audioToggle.textContent = '🔊';
+    if (audioContext.state === 'suspended') audioContext.resume();
+    if (ambientAudio) ambientAudio.play();
+  }
+  if (typeof gtag !== 'undefined') gtag('event', 'audio_toggled', { muted: isMuted });
+});
+
+// Hook into system/anomaly changes to play warp sound
+const originalLoadSystem = loadSystem;
+loadSystem = function(key) {
+  if (!isMuted && audioContext) playWarpSound();
+  originalLoadSystem(key);
+};
+const originalLoadAnomaly = loadAnomaly;
+loadAnomaly = function(key) {
+  if (!isMuted && audioContext) playWarpSound();
+  originalLoadAnomaly(key);
+};
 
 loadSystem('sol');
 setTimeout(() => {
