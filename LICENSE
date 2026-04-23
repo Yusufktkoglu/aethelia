@@ -1,21 +1,48 @@
-MIT License
+AETHELIA — Non-Commercial Use License
 
-Copyright (c) 2026 Aethelia
+Copyright (c) 2026 Aethelia. All rights reserved.
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+of this software and associated files (the "Software"), to use, copy, modify,
+merge, and distribute copies of the Software for NON-COMMERCIAL PURPOSES ONLY,
+subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. ATTRIBUTION
+   The above copyright notice and this license must be included in all copies
+   or substantial portions of the Software. Any public deployment, fork, or
+   derivative work must clearly credit "Aethelia" and link to the original
+   project at https://aethelia.space.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+2. NO COMMERCIAL USE
+   The Software, in whole or in part, may NOT be sold, licensed, or used as
+   part of any commercial product, service, or offering. You may not charge
+   money, request donations, display advertisements, or otherwise generate
+   revenue from this Software or any derivative work based on it.
+
+3. NO REBRANDING AS YOUR OWN
+   You may not remove or modify the AETHELIA branding, name, or identity and
+   present the Software as your own original creation. Forks and modifications
+   must use a different name and make clear they are derivatives.
+
+4. MODIFICATIONS
+   You are free to modify, extend, or build upon the Software for personal,
+   educational, or non-commercial research use. Derivative works must also be
+   released under this same license or a compatible non-commercial license.
+
+5. NO WARRANTY
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
+   WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+
+6. COMMERCIAL LICENSE
+   For commercial use, licensing, or partnership inquiries, please contact the
+   author through https://aethelia.space.
+
+---
+
+By using, copying, or modifying this Software, you agree to the terms above.
+
+For questions: https://aethelia.space
