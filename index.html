@@ -588,6 +588,229 @@
     opacity: 0.5;
   }
 
+  /* ===== FEEDBACK BUTTON & MODAL ===== */
+  .feedback-toggle {
+    position: fixed;
+    bottom: 110px;
+    right: 20px;
+    z-index: 25;
+    width: 42px;
+    height: 42px;
+    background: var(--bg-panel);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    transition: all 0.2s;
+  }
+  .feedback-toggle:hover {
+    border-color: var(--accent-2);
+    color: var(--accent-2);
+  }
+
+  .feedback-modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(5, 8, 16, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 400;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+  }
+  .feedback-modal-overlay.active {
+    display: flex;
+    opacity: 1;
+  }
+  .feedback-modal {
+    background: rgba(15, 20, 35, 0.96);
+    border: 1px solid var(--border-active);
+    padding: 32px 34px;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    animation: feedbackIn 0.35s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+  @keyframes feedbackIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.97); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+  .feedback-close {
+    position: absolute;
+    top: 16px; right: 16px;
+    background: none;
+    border: none;
+    color: var(--text-dim);
+    font-size: 20px;
+    cursor: pointer;
+    padding: 4px 8px;
+    line-height: 1;
+    transition: color 0.2s;
+  }
+  .feedback-close:hover { color: var(--text); }
+
+  .feedback-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 28px;
+    line-height: 1.15;
+    margin-bottom: 4px;
+    color: var(--text);
+  }
+  .feedback-title em { color: var(--accent-2); font-style: italic; }
+  .feedback-subtitle {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.25em;
+    color: var(--text-muted);
+    margin-bottom: 24px;
+  }
+
+  .feedback-field {
+    display: block;
+    margin-bottom: 14px;
+  }
+  .feedback-label {
+    display: block;
+    font-family: 'Syncopate', sans-serif;
+    font-weight: 700;
+    font-size: 9px;
+    letter-spacing: 0.3em;
+    color: var(--text-dim);
+    margin-bottom: 6px;
+  }
+  .feedback-input, .feedback-textarea {
+    width: 100%;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 10px 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    transition: border-color 0.2s;
+    resize: vertical;
+  }
+  .feedback-input:focus, .feedback-textarea:focus {
+    outline: none;
+    border-color: var(--accent-2);
+  }
+  .feedback-textarea {
+    min-height: 120px;
+    font-family: inherit;
+    font-size: 13px;
+  }
+  .feedback-type-row {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+  .feedback-type-btn {
+    padding: 8px 6px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: 'Syncopate', sans-serif;
+    font-weight: 700;
+    font-size: 9px;
+    letter-spacing: 0.18em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .feedback-type-btn:hover { color: var(--text); border-color: var(--border-active); }
+  .feedback-type-btn.active {
+    border-color: var(--accent-2);
+    color: var(--accent-2);
+    background: rgba(124, 213, 255, 0.08);
+  }
+
+  .feedback-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 22px;
+  }
+  .feedback-submit {
+    flex: 1;
+    padding: 12px 20px;
+    background: var(--accent-2);
+    border: none;
+    color: var(--bg-deep);
+    font-family: 'Syncopate', sans-serif;
+    font-weight: 700;
+    font-size: 10px;
+    letter-spacing: 0.3em;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .feedback-submit:hover {
+    background: #9edaff;
+    box-shadow: 0 0 20px rgba(124, 213, 255, 0.4);
+  }
+  .feedback-submit:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+  .feedback-direct {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.12em;
+    padding: 12px 18px;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+  .feedback-direct:hover {
+    border-color: var(--text-dim);
+    color: var(--text);
+  }
+
+  .feedback-footer {
+    margin-top: 14px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+    text-align: center;
+  }
+  .feedback-footer a {
+    color: var(--accent-2);
+    text-decoration: none;
+  }
+  .feedback-footer a:hover { text-decoration: underline; }
+
+  .feedback-sent {
+    text-align: center;
+    padding: 40px 20px;
+  }
+  .feedback-sent-icon {
+    font-size: 40px;
+    margin-bottom: 14px;
+  }
+  .feedback-sent-title {
+    font-family: 'Instrument Serif', serif;
+    font-size: 26px;
+    margin-bottom: 8px;
+    color: var(--text);
+  }
+  .feedback-sent-text {
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 1.5;
+  }
+
   /* ===== TRIVIA BOX (Did You Know) ===== */
   .trivia-box {
     margin-top: 12px;
@@ -751,6 +974,25 @@
       font-size: 14px !important;
     }
 
+    /* Feedback button — next to audio on mobile */
+    .feedback-toggle {
+      bottom: auto !important;
+      top: 112px !important;
+      right: 10px !important;
+      width: 36px !important;
+      height: 36px !important;
+      font-size: 13px !important;
+    }
+
+    .feedback-modal {
+      padding: 24px 22px !important;
+      max-height: 88vh;
+      overflow-y: auto;
+    }
+    .feedback-title { font-size: 22px !important; }
+    .feedback-type-btn { font-size: 8px !important; letter-spacing: 0.14em !important; }
+    .feedback-actions { flex-direction: column; }
+
     /* When gallery is expanded, push info sheet up so they don't collide */
     body.gallery-expanded .panel-right {
       bottom: 260px !important;
@@ -776,6 +1018,58 @@
 
 <!-- Audio toggle button -->
 <button class="audio-toggle muted" id="audio-toggle" title="Toggle ambient audio">🔇</button>
+
+<!-- Feedback button -->
+<button class="feedback-toggle" id="feedback-toggle" title="Send feedback" aria-label="Send feedback">✉</button>
+
+<!-- Feedback modal -->
+<div class="feedback-modal-overlay" id="feedback-modal-overlay">
+  <div class="feedback-modal" id="feedback-modal">
+    <button class="feedback-close" id="feedback-close" aria-label="Close">×</button>
+
+    <div id="feedback-form-view">
+      <div class="feedback-title">Share your <em>thoughts</em></div>
+      <div class="feedback-subtitle">FEEDBACK · BUG · IDEA</div>
+
+      <div class="feedback-type-row">
+        <button class="feedback-type-btn active" data-feedback-type="feedback">💬 FEEDBACK</button>
+        <button class="feedback-type-btn" data-feedback-type="bug">🐛 BUG</button>
+        <button class="feedback-type-btn" data-feedback-type="idea">💡 IDEA</button>
+      </div>
+
+      <div class="feedback-field">
+        <label class="feedback-label" for="feedback-email">YOUR EMAIL · OPTIONAL</label>
+        <input type="email" class="feedback-input" id="feedback-email" placeholder="you@example.com (so i can reply)">
+      </div>
+
+      <div class="feedback-field">
+        <label class="feedback-label" for="feedback-message">YOUR MESSAGE</label>
+        <textarea class="feedback-textarea" id="feedback-message" placeholder="what did you find? what would you want to see? bugs, ideas, anything..."></textarea>
+      </div>
+
+      <div class="feedback-actions">
+        <button class="feedback-submit" id="feedback-submit">SEND MESSAGE</button>
+        <a class="feedback-direct" id="feedback-direct" href="mailto:feedback@aethelia.space">OPEN IN MAIL</a>
+      </div>
+
+      <div class="feedback-footer">
+        or just email <a href="mailto:feedback@aethelia.space">feedback@aethelia.space</a>
+      </div>
+    </div>
+
+    <div id="feedback-sent-view" style="display:none;">
+      <div class="feedback-sent">
+        <div class="feedback-sent-icon">✦</div>
+        <div class="feedback-sent-title">Thank you</div>
+        <div class="feedback-sent-text">
+          Your mail app should be opening now.<br>
+          If it didn't, send directly to<br>
+          <a href="mailto:feedback@aethelia.space" style="color: var(--accent-2);">feedback@aethelia.space</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
 <div id="canvas-container"></div>
 
@@ -3209,6 +3503,107 @@ if (galleryEl) {
   });
   observer.observe(galleryEl, { attributes: true, attributeFilter: ['class'] });
 }
+
+// ===== FEEDBACK MODAL =====
+const feedbackToggle = document.getElementById('feedback-toggle');
+const feedbackOverlay = document.getElementById('feedback-modal-overlay');
+const feedbackClose = document.getElementById('feedback-close');
+const feedbackSubmit = document.getElementById('feedback-submit');
+const feedbackDirect = document.getElementById('feedback-direct');
+const feedbackEmail = document.getElementById('feedback-email');
+const feedbackMessage = document.getElementById('feedback-message');
+const feedbackFormView = document.getElementById('feedback-form-view');
+const feedbackSentView = document.getElementById('feedback-sent-view');
+let currentFeedbackType = 'feedback';
+
+function openFeedback() {
+  feedbackOverlay.classList.add('active');
+  // Reset to form view
+  feedbackFormView.style.display = '';
+  feedbackSentView.style.display = 'none';
+  if (typeof gtag !== 'undefined') gtag('event', 'feedback_opened');
+}
+function closeFeedback() {
+  feedbackOverlay.classList.remove('active');
+}
+feedbackToggle.addEventListener('click', openFeedback);
+feedbackClose.addEventListener('click', closeFeedback);
+feedbackOverlay.addEventListener('click', (e) => {
+  if (e.target === feedbackOverlay) closeFeedback();
+});
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape' && feedbackOverlay.classList.contains('active')) closeFeedback();
+});
+
+// Type buttons
+document.querySelectorAll('.feedback-type-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.feedback-type-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentFeedbackType = btn.dataset.feedbackType;
+  });
+});
+
+function buildMailto() {
+  const typeLabel = {
+    'feedback': 'Feedback',
+    'bug': 'Bug Report',
+    'idea': 'Idea / Feature Request'
+  }[currentFeedbackType] || 'Feedback';
+
+  const email = feedbackEmail.value.trim();
+  const msg = feedbackMessage.value.trim();
+
+  const subject = `[Aethelia] ${typeLabel}`;
+  let body = msg || '';
+  if (email) {
+    body += '\n\n---\nReply to: ' + email;
+  }
+  // Browser info for bug reports
+  if (currentFeedbackType === 'bug') {
+    body += '\n\n---\nBrowser: ' + navigator.userAgent;
+    body += '\nScreen: ' + window.innerWidth + 'x' + window.innerHeight;
+  }
+
+  return 'mailto:feedback@aethelia.space'
+    + '?subject=' + encodeURIComponent(subject)
+    + '&body=' + encodeURIComponent(body);
+}
+
+feedbackSubmit.addEventListener('click', () => {
+  const msg = feedbackMessage.value.trim();
+  if (!msg) {
+    feedbackMessage.focus();
+    feedbackMessage.style.borderColor = 'var(--accent-3)';
+    setTimeout(() => { feedbackMessage.style.borderColor = ''; }, 1500);
+    return;
+  }
+
+  const mailtoLink = buildMailto();
+  // Open the user's mail client
+  window.location.href = mailtoLink;
+
+  // Track event
+  if (typeof gtag !== 'undefined') {
+    gtag('event', 'feedback_sent', { type: currentFeedbackType });
+  }
+
+  // Show thank you view
+  setTimeout(() => {
+    feedbackFormView.style.display = 'none';
+    feedbackSentView.style.display = '';
+  }, 300);
+});
+
+// Update "Open in Mail" link whenever typing happens
+function updateDirectLink() {
+  feedbackDirect.href = buildMailto();
+}
+feedbackEmail.addEventListener('input', updateDirectLink);
+feedbackMessage.addEventListener('input', updateDirectLink);
+document.querySelectorAll('.feedback-type-btn').forEach(btn => {
+  btn.addEventListener('click', updateDirectLink);
+});
 
 loadSystem('sol');
 setTimeout(() => {
